@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Chat App</title>
+  </head>
+  <body>
+    <div id="messages"></div>
+    <form id="chat-form">
+      <input type="text" id="chat-input" />
+      <button type="submit">Send</button>
+    </form>
+    <script src="https://unpkg.com/@tensorflow/tfjs"></script>
+    <script>
+      const messagesDiv = document.getElementById('messages');
+      const chatForm = document.getElementById('chat-form');
+      const chatInput = document.getElementById('chat-input');
+
+      function insertUrlToDiv(url) {
+        fetch(url)
+          .then((response) => response.text())
+          .then((data) => {
+            messagesDiv.innerHTML = data;
+          })
+          .catch((error) => console.error(error));
+      }
+
+      chatForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const message = chatInput.value;
+        fetch('/chat?msg=' + message);
+        chatInput.value = '';
+      });
+
+      setInterval(() => {
+        insertUrlToDiv('/chat');
+      }, 1000);
+    </script>
+  </body>
+</html>
